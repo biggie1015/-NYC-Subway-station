@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using SubwayEntrance.Data.JWTHelper;
 
 namespace SubwayEntrance.Data.EFCore
 {
@@ -97,6 +98,13 @@ namespace SubwayEntrance.Data.EFCore
         public async Task<int> GetUserIdByEmail(string email)
         {
            return await context.Users.Where(x => x.Email == email).Select(s => s.Id).FirstOrDefaultAsync();
+        }
+
+
+        public string CalculateDistance(double lat, double lng)
+        {
+            var cal = new Calculate();
+            return  cal.CalulateDistance(lat, lng);
         }
 
     }

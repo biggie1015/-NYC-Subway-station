@@ -9,6 +9,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
+using NSwag;
+using NSwag.AspNetCore;
+using NSwag.Generation.Processors.Security;
 using SubwayEntrance.Data;
 using SubwayEntrance.Data.EFCore;
 using SubwayEntrance.Models;
@@ -32,7 +35,7 @@ namespace SubwayEntrance
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-           
+
             services.AddControllers();
             services.AddDbContext<SubwayContext>(opt =>
             opt.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
@@ -52,10 +55,12 @@ namespace SubwayEntrance
             // configure jwt authentication
             //var appSettings = appSettingsSection.Get<AppSettings>();
             var secretKey = this.Configuration.GetValue<string>("Secret");
-            services.AddAuthentication(auth => {
+            services.AddAuthentication(auth =>
+            {
                 auth.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 auth.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            }).AddJwtBearer(jwt => {
+            }).AddJwtBearer(jwt =>
+            {
                 jwt.RequireHttpsMetadata = false;
                 jwt.SaveToken = true;
                 jwt.TokenValidationParameters = new TokenValidationParameters()
@@ -67,6 +72,40 @@ namespace SubwayEntrance
                 };
             });
 
+
+
+            services.AddSwaggerDocument(config =>
+            {
+                config.OperationProcessors.Add(new OperationSecurityScopeProcessor("JWT token"));
+                config.AddSecurity("JWT token", new OpenApiSecurityScheme
+                {
+
+                    Type = OpenApiSecuritySchemeType.ApiKey,
+                    Name = "Authorization",
+                    Description = "Copy 'Bearer ' + valid JWT token into field",
+                    In = OpenApiSecurityApiKeyLocation.Header
+                });
+
+
+                config.PostProcess = document =>
+                {
+                    document.Info.Version = "v1";
+                    document.Info.Title = "NYC Station";
+                    document.Info.Description = "A simple ASP.NET Core web API";
+                    document.Info.TermsOfService = "None";
+                    document.Info.Contact = new NSwag.OpenApiContact
+                    {
+                        Name = "Ismel Santana",
+                        Email = string.Empty,
+
+                    };
+                };
+
+
+            });
+
+
+            
 
 
         }
@@ -91,6 +130,11 @@ namespace SubwayEntrance
             {
                 endpoints.MapControllers();
             });
+            app.UseOpenApi();
+            app.UseSwaggerUi3();
+         
+
+
         }
     }
 }

@@ -10,7 +10,7 @@ using SubwayEntrance.Data;
 namespace SubwayEntrance.Migrations
 {
     [DbContext(typeof(SubwayContext))]
-    [Migration("20220802144429_InitialMigration")]
+    [Migration("20220802164853_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -72,18 +72,22 @@ namespace SubwayEntrance.Migrations
 
             modelBuilder.Entity("SubwayEntrance.Models.UserWithSubway", b =>
                 {
-                    b.Property<int>("userId")
-                        .HasColumnType("int");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int>("SubwayUserId")
                         .HasColumnType("int");
 
-                    b.Property<int>("Id")
+                    b.Property<int>("userId")
                         .HasColumnType("int");
 
-                    b.HasKey("userId", "SubwayUserId");
+                    b.HasKey("Id");
 
                     b.HasIndex("SubwayUserId");
+
+                    b.HasIndex("userId");
 
                     b.ToTable("UserWithSubways");
                 });

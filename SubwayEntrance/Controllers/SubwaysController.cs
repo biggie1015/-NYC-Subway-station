@@ -52,6 +52,18 @@ namespace SubwayEntrance.Controllers
             return Ok(result);
         }
 
+
+        [HttpGet("CalcualteDistance")]
+        public async Task<ActionResult<string>> CalcualteDistance(int stationId)
+        {
+            var model = await repository.GetSubwayById(stationId);
+            double lat = model.The_geom.Coordinates[0];
+            double lng = model.The_geom.Coordinates[1];
+
+            var reuslt = repository.CalculateDistance(lat,lng);
+            return Ok(reuslt);
+        }
+
         [HttpPost("UserWithStation/{stationId}")]
         public async Task<IActionResult> SaveUserStation(int stationId)
         {
@@ -88,9 +100,12 @@ namespace SubwayEntrance.Controllers
             {
 
                 await repositoryUs.Add(userWithSubway);
+                
             }
+
             catch (Exception ex)
             {
+                return BadRequest(ex.Message);
             }
 
             return Ok();
@@ -98,7 +113,7 @@ namespace SubwayEntrance.Controllers
 
         }
 
-        //  return Conflict(new { message = $"An existing record with the name '{model.Name}' was already found." });
+        
 
 
 

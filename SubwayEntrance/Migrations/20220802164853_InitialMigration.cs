@@ -42,13 +42,14 @@ namespace SubwayEntrance.Migrations
                 name: "UserWithSubways",
                 columns: table => new
                 {
-                    userId = table.Column<int>(nullable: false),
-                    SubwayUserId = table.Column<int>(nullable: false),
                     Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    userId = table.Column<int>(nullable: false),
+                    SubwayUserId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_UserWithSubways", x => new { x.userId, x.SubwayUserId });
+                    table.PrimaryKey("PK_UserWithSubways", x => x.Id);
                     table.ForeignKey(
                         name: "FK_UserWithSubways_SubwayUsers_SubwayUserId",
                         column: x => x.SubwayUserId,
@@ -67,6 +68,11 @@ namespace SubwayEntrance.Migrations
                 name: "IX_UserWithSubways_SubwayUserId",
                 table: "UserWithSubways",
                 column: "SubwayUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserWithSubways_userId",
+                table: "UserWithSubways",
+                column: "userId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

@@ -11,7 +11,7 @@ namespace SubwayEntrance.Data.JWTHelper
 {
     public class Calculate
     {
-        public string CalulateDistance(int lat, int lon)
+        public string CalulateDistance(double lat, double lon)
         {
             double rlat1 = Math.PI * lat / 180;
             double rlat2 = Math.PI * lon / 180;

@@ -25,8 +25,7 @@ namespace SubwayEntrance.Models
 
     public class UserWithSubway:IEntity
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        
         public int Id { get; set; }
         public int userId { get; set; }
         public User  Authenticate { get; set; }

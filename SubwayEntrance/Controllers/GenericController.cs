@@ -23,12 +23,7 @@ namespace SubwayEntrance.Controllers
 
 
         // POST: api/[controller]
-        [HttpPost]
-        public async Task<ActionResult<TEntity>> Post(TEntity UserSubway)
-        {
-            await repository.Add(UserSubway);
-            return CreatedAtAction("Get", new { id = UserSubway.Id }, UserSubway);
-        }
+        
 
     }
 }

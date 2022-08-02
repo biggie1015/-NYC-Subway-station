@@ -70,18 +70,22 @@ namespace SubwayEntrance.Migrations
 
             modelBuilder.Entity("SubwayEntrance.Models.UserWithSubway", b =>
                 {
-                    b.Property<int>("userId")
-                        .HasColumnType("int");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int>("SubwayUserId")
                         .HasColumnType("int");
 
-                    b.Property<int>("Id")
+                    b.Property<int>("userId")
                         .HasColumnType("int");
 
-                    b.HasKey("userId", "SubwayUserId");
+                    b.HasKey("Id");
 
                     b.HasIndex("SubwayUserId");
+
+                    b.HasIndex("userId");
 
                     b.ToTable("UserWithSubways");
                 });
